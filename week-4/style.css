@@ -1,0 +1,112 @@
+
+p {
+color: black; 
+padding: 5px
+}
+
+
+.myname{
+    color:green;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+html {
+    font-family: "benton-modern-display", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.flex{
+    display: flex;
+    flex-direction: row;
+}
+
+
+.color-box{
+
+    height: 200px;
+    width: 1000px;
+}
+
+#box1 {
+    background-color: #002626 ;
+}
+
+#box2 {
+    background-color: #ECCE8E ;
+}
+
+#box3 {
+    background-color: #5E4B56;
+}
+
+#box4 {
+    background-color: #C2C6A7 ;
+}
+
+#box5 {
+    background-color: #9AC2C5;
+}
+
+p {
+    font-size: 16px;
+    padding: 5px
+}
+
+.small-text{
+    font-size: 12px;
+    padding: 5px
+}
+
+h3{
+    font-size: 20px;
+    padding: 5px
+}
+
+h2{
+    font-size: 24px;
+    padding: 5px
+}
+
+h1{
+    font-size: 28px;
+    padding: 5px
+}
+
+
+a {
+    text-decoration: none;
+    color:#002626;
+}
+
+a:hover {
+    text-decoration: underline;
+    color:#9AC2C5;
+}
+
+a:visted{
+    color:#5E4B56;
+}
+
+
+
+
+.button{
+    background-color: #ECCE8E;
+    font-size: 24px;
+    text-decoration: none;
+    margin: 10px 2px;
+}
+
+.button:hover {
+    background-color: #9AC2C5;
+}
+
+.whitegoals {
+    color:white;
+}
+
+.whiteabout {
+    color:white;
+}
