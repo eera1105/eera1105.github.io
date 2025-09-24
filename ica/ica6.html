@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style>
+
+.gallery-container { display: flex; flex-direction: column; }
+.gallery-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
+.photo-card { flex: 1 1 300px; height: 200px; }
+.featured { flex: 1 1 100%; height: 300px; }
+
+
+.gallery-container {
+    display: grid;
+    grid-template-areas: 
+    "header     header"
+    "nav        sidebar"
+    "main       sidebar";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.gallery-header {
+    grid-area: header;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.gallery-nav {
+    grid-area: nav;
+    display: flex; 
+    gap: .05rem;
+}
+
+.gallery-grid {
+    grid-area: main;
+}
+
+.gallery-sidebar {
+    grid-area: sidebar;
+    background-color: bisque;
+    padding: 1rem;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax (250px, 1 fr));
+    gap: 1rem;
+}
+
+.photo-card {
+    height: 200px;
+    background-color: lavender;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+
+}
+
+.featured {
+    grid-column: span 2;
+    height: 300px;
+}
+
+</style>
+
+
+</head>
+<body>
+    
+  <div class="gallery-container">
+  <header class="gallery-header">Photo Gallery</header>
+  <nav class="gallery-nav">
+    <button>All</button>
+    <button>Nature</button>
+    <button>Architecture</button>
+  </nav>
+  <main class="gallery-grid">
+    <div class="photo-card" data-category="nature">Photo 1</div>
+    <div class="photo-card" data-category="architecture">Photo 2</div>
+    <div class="photo-card" data-category="nature">Photo 3</div>
+    <div class="photo-card featured" data-category="architecture">Featured Photo</div>
+    <div class="photo-card" data-category="nature" >Photo 5</div>
+    <div class="photo-card" data-category="architecture">Photo 6</div>
+  </main>
+  <aside class="gallery-sidebar">Filter Options</aside>
+</div>
+
+<script>
+
+// Get all filter buttons and photo cards
+const filterButtons = document.querySelectorAll('.gallery-nav button');
+const photoCards = document.querySelectorAll('.photo-card');
+
+// Add click event to each button
+filterButtons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    const filterValue = event.target.textContent.toLowerCase();
+    filterPhotos(filterValue);
+  });
+});
+
+function filterPhotos(category) {
+  photoCards.forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+</script>
+
+
+
+</body>
+</html>
+
