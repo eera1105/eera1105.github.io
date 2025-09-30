@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hub - Home</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-brand">HCCU Hub</div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-menu">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- Homepage grid -->
+  <main class="homepage">
+    <section class="hero">
+      <h1>Welcome to the HCCU Hub</h1>
+      <p>Your go-to place for local resources, events, and connections.</p>
+    </section>
+
+    <section class="featured">
+      <h2>Featured Updates</h2>
+      <p>Check out the latest articles here.</p>
+    </section>
+
+    <section class="events">
+      <h2>Upcoming Events</h2>
+      <p>Meetings, workshops, events, and volunteer opportunities by HCCU.</p>
+    </section>
+
+    <footer class="footer">
+      <section id="newsletter">
+        <h3>Subscribe to the HCCU Newsletter! </h3>
+        <form id="newsletterForm" aria-label="Newsletter subscription form">
+          <label for="email">Email:</label>
+          <input type="email" id="email" required placeholder="Enter your email">
+          <button type="submit">Subscribe</button>
+          <p id="formMessage" role="alert" aria-live="polite"></p>
+        </form>
+      </section>
+    </footer>
+  </main>
+
+  <!-- Inline JavaScript -->
+  <script>
+    // Toggle navigation
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+      navToggle.classList.toggle('active');
+    });
+
+    // Newsletter form
+    const form = document.querySelector('#newsletterForm');
+    const formMessage = document.querySelector('#formMessage');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.querySelector('#email').value;
+      if (!email.includes('@')) {
+        formMessage.textContent = 'Please enter a valid email.';
+        formMessage.style.color = 'red';
+      } else {
+        formMessage.textContent = 'Thank you for subscribing!';
+        formMessage.style.color = 'green';
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>

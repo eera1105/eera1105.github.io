@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCCU Home</title>
+<link rel="stylesheet" href="stylesheet.css">
+
+</head>
+
+
+<body>
+    <nav class="main-nav">
+    <div class="nav-brand">HCCU Home</div>
+
+    <button class="nav-toggle" aria-label="Toggle navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+    </button>
+
+    <ul class="nav-menu">
+
+    <li><a href="#home">Home</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#contact">Contact</a></li>
+
+    </ul>
+</nav>
+
+<script>
+
+    let menuVisible = false; 
+
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+navToggle.addEventListener( 'click', toggleMenu); 
+
+navToggle.addEventListener('keydown', (e) =>{
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault ();
+        toggleMenu ();
+    }
+});
+
+function toggleMenu () {
+    if (menuVisible == false) {
+        navMenu.classList.add('show');
+        navToggle.classList.add('active');
+        navToggle.setAttribute('aria-label', 'Close navigation menu ');
+        navToggle.setAttribute('aria-expanded', 'true');
+    
+        const firstLink = navMenu.querySelector('a');
+        if (firstLink) firstLink.focus ();
+
+        menuVisible = true; 
+
+    } 
+    else {
+        navMenu.classList.remove('show'); 
+        navToggle.classList.remove('active')
+        navToggle.setAttribute('aria-label', 'Open navigation menu');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.focus();
+
+        menuVisible = false;
+    }
+}
+
+// Save language choice - do smth in css here
+function setLanguage(lang) {
+    localStorage.setItem('userLanguage', lang);
+    // Update page content based on language
+}
+
+// Load on page visit
+const userLang = localStorage.getItem('userLanguage') || 'en';
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

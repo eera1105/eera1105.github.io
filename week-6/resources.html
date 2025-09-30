@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hub - Resources</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-brand">HCCU Hub</div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-menu">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- Resources grid -->
+  <main class="resources">
+    <section class="filters">
+      <h2>Search Resources</h2>
+      <label for="search">Type to filter:</label>
+      <input type="text" id="search" placeholder="Search resources...">
+    </section>
+
+    <section class="content">
+      <h2>Available Resources</h2>
+      <ul id="resourceList">
+        <li data-category="writing">Style Guidec</li>
+        <li data-category="wordpress">Publishing Guide</li>
+        <li data-category="events">Upcoming Events</li>
+        <li data-category="join">How to Join HCCU</li>
+      </ul>
+    </section>
+
+    <section class="highlight">
+      <h2>How satisfied are you with your experience at HCCU?</h2>
+      <form id="ratingForm" aria-label="Resource rating form">
+        <label for="rating">Select rating (1–5):</label>
+        <select id="rating" required>
+          <option value="">Choose...</option>
+          <option value="1">1 - Poor</option>
+          <option value="2">2 - Fair</option>
+          <option value="3">3 - Good</option>
+          <option value="4">4 - Very Good</option>
+          <option value="5">5 - Excellent</option>
+        </select>
+        <button type="submit">Submit Rating</button>
+      </form>
+      <p id="ratingMessage" role="alert" aria-live="polite"></p>
+    </section>
+
+    
+  </main>
+
+  <!-- Inline JavaScript -->
+  <script>
+    // Toggle navigation
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+      navToggle.classList.toggle('active');
+    });
+
+    // Filter resources
+    const searchInput = document.querySelector('#search');
+    const resourceList = document.querySelectorAll('#resourceList li');
+    searchInput.addEventListener('keyup', () => {
+      const query = searchInput.value.toLowerCase();
+      resourceList.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+
+    // Rating system
+    const ratingForm = document.querySelector('#ratingForm');
+    const ratingMessage = document.querySelector('#ratingMessage');
+    ratingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rating = document.querySelector('#rating').value;
+      if (rating) {
+        ratingMessage.textContent = `Thank you for rating us ${rating}/5!`;
+        ratingMessage.style.color = 'green';
+        ratingForm.reset();
+      } else {
+        ratingMessage.textContent = 'Please select a rating.';
+        ratingMessage.style.color = 'red';
+      }
+    });
+  </script>
+</body>
+</html>
