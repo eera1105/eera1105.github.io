@@ -1,91 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HCCU Home</title>
-<link rel="stylesheet" href="stylesheet.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCCU Home</title>
+  <link rel="stylesheet" href="stylesheet.css">
 </head>
-
-
 <body>
-    <nav class="main-nav">
-    <div class="nav-brand">HCCU Home</div>
+  <nav class="main-nav">
+    <div class="nav-brand" data-i18n="brand">HCCU Home</div>
 
     <button class="nav-toggle" aria-label="Toggle navigation menu">
-    <span></span>
-    <span></span>
-    <span></span>
+      <span></span><span></span><span></span>
     </button>
 
     <ul class="nav-menu">
-
-    <li><a href="#home">Home</a></li>
-    <li><a href="#resources">Resources</a></li>
-    <li><a href="#events">Events</a></li>
-    <li><a href="#contact">Contact</a></li>
-
+      <li><a href="#home" data-i18n="home">Home</a></li>
+      <li><a href="#resources" data-i18n="resources">Resources</a></li>
+      <li><a href="#events" data-i18n="events">Events</a></li>
+      <li><a href="#contact" data-i18n="contact">Contact</a></li>
     </ul>
-</nav>
+  </nav>
+
+  <!-- Language Selector -->
+  <div class="lang-selector">
+    <button onclick="setLanguage('en')">English</button>
+    <button onclick="setLanguage('es')">Español</button>
+  </div>
 
 <script>
-
-    let menuVisible = false; 
+/* ---- Responsive Navigation Toggle ---- */
+let menuVisible = false; 
 
 const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 
-navToggle.addEventListener( 'click', toggleMenu); 
-
+navToggle.addEventListener('click', toggleMenu); 
 navToggle.addEventListener('keydown', (e) =>{
-    if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault ();
-        toggleMenu ();
-    }
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleMenu();
+  }
 });
 
-function toggleMenu () {
-    if (menuVisible == false) {
-        navMenu.classList.add('show');
-        navToggle.classList.add('active');
-        navToggle.setAttribute('aria-label', 'Close navigation menu ');
-        navToggle.setAttribute('aria-expanded', 'true');
-    
-        const firstLink = navMenu.querySelector('a');
-        if (firstLink) firstLink.focus ();
-
-        menuVisible = true; 
-
-    } 
-    else {
-        navMenu.classList.remove('show'); 
-        navToggle.classList.remove('active')
-        navToggle.setAttribute('aria-label', 'Open navigation menu');
-        navToggle.setAttribute('aria-expanded', 'false');
-        navToggle.focus();
-
-        menuVisible = false;
-    }
+function toggleMenu() {
+  if (!menuVisible) {
+    navMenu.classList.add('show');
+    navToggle.classList.add('active');
+    navToggle.setAttribute('aria-label', 'Close navigation menu');
+    navToggle.setAttribute('aria-expanded', 'true');
+    const firstLink = navMenu.querySelector('a');
+    if (firstLink) firstLink.focus();
+    menuVisible = true;
+  } else {
+    navMenu.classList.remove('show');
+    navToggle.classList.remove('active');
+    navToggle.setAttribute('aria-label', 'Open navigation menu');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.focus();
+    menuVisible = false;
+  }
 }
 
-// Save language choice - do smth in css here
+/* ---- Language Preference with localStorage ---- */
+
+// Data stored: the user's chosen language code ("en", "es", etc.)
+// Why it's necessary: ensures the site loads in the user's preferred language on return visits
+// User control: they can change it anytime with the language buttons, or clear browser storage manually
+
+const translations = {
+  en: {
+    brand: "HCCU Home",
+    home: "Home",
+    resources: "Resources",
+    events: "Events",
+    contact: "Contact"
+  },
+  es: {
+    brand: "Inicio HCCU",
+    home: "Inicio",
+    resources: "Recursos",
+    events: "Eventos",
+    contact: "Contacto"
+  }
+};
+
+// Save language choice
 function setLanguage(lang) {
-    localStorage.setItem('userLanguage', lang);
-    // Update page content based on language
+  localStorage.setItem('userLanguage', lang);   // store preference in localStorage
+  applyLanguage(lang);                          // immediately update the page
+  document.documentElement.setAttribute("lang", lang); // update <html lang=""> for accessibility
 }
 
-// Load on page visit
-const userLang = localStorage.getItem('userLanguage') || 'en';
+// Apply translations
+function applyLanguage(lang) {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    el.textContent = translations[lang][key];
+  });
+}
 
+// Load preferred language on page visit
+const userLang = localStorage.getItem('userLanguage') || 'en'; // fallback to English if none stored
+applyLanguage(userLang);
+document.documentElement.setAttribute("lang", userLang);
 
 </script>
-
-
-
-
-
-
-
 </body>
 </html>
