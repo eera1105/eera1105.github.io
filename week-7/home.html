@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hub - Home</title>
+  <link rel="stylesheet" href="1stylesheet.css?v=4">
+
+
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-brand">HCCU Hub</div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-menu">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- Homepage grid -->
+  <main class="homepage">
+    <section class="hero">
+      <h1>Welcome to the HCCU Hub</h1>
+      <p>Your go-to place for local resources, events, and connections.</p>
+    </section>
+
+        <!-- Privacy & Data -->
+    <section class="privacy module" id="privacy">
+      <h2>Privacy & Data</h2>
+      <p class="privacy-statement">
+        <strong>What we collect:</strong> your newsletter email (if you subscribe) and your resource rating.
+        <strong>Why:</strong> to confirm your subscription and improve resources.
+        <strong>How long & where:</strong> stored in your browser’s localStorage for up to 30 days for the email and 180 days for ratings.
+        <strong>Your controls:</strong> you can opt out of storage, clear your data anytime, and we’ll show a loading message when external data is fetched.
+      </p>
+
+      <fieldset class="privacy-controls">
+        <legend>Data & Accessibility Preferences</legend>
+        <label>
+          <input type="checkbox" id="optOut" />
+          Opt out of saving data in my browser
+        </label>
+        <label>
+          <input type="checkbox" id="contrastToggle" />
+          High-contrast mode
+        </label>
+        <button type="button" id="clearDataBtn">Clear my data</button>
+        <p id="privacyMessage" role="status" aria-live="polite"></p>
+      </fieldset>
+    </section>
+
+
+    <section class="featured">
+      <h2>Featured Updates</h2>
+      <p>Check out the latest articles here.</p>
+    </section>
+
+    <section class="events">
+      <h2>Upcoming Events</h2>
+      <p>Meetings, workshops, events, and volunteer opportunities by HCCU.</p>
+    </section>
+
+    <footer class="footer">
+      <section id="newsletter">
+        <h3>Subscribe to the HCCU Newsletter! </h3>
+                <form id="newsletterForm" aria-label="Newsletter subscription form">
+          <label for="email">Email:</label>
+          <input type="email" id="email" required placeholder="Enter your email" autocomplete="email" inputmode="email">
+          <button type="submit">Subscribe</button>
+          <p id="formMessage" role="alert" aria-live="polite"></p>
+        </form>
+
+      </section>
+    </footer>
+  </main>
+
+  <!-- Inline JavaScript -->
+    <script>
+    /************** Utils: storage with expiration **************/
+    const STORAGE_KEYS = {
+      email: 'hccu_email',
+      emailExp: 'hccu_email_exp',
+      rating: 'hccu_rating',           // shared policy across pages
+      ratingExp: 'hccu_rating_exp',
+      optOut: 'hccu_opt_out',
+      contrast: 'hccu_contrast'
+    };
+    const DAYS = { EMAIL: 30, RATING: 180 };
+
+    const now = () => Date.now();
+    const daysToMs = d => d * 24 * 60 * 60 * 1000;
+
+    function setWithExpiry(key, value, days) {
+      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key + '_exp', String(now() + daysToMs(days)));
+    }
+    function getWithExpiry(key) {
+      const exp = Number(localStorage.getItem(key + '_exp'));
+      if (exp && now() > exp) {
+        localStorage.removeItem(key);
+        localStorage.removeItem(key + '_exp');
+        return null;
+      }
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    }
+    function clearAllHccuData() {
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('hccu_'))
+        .forEach(k => localStorage.removeItem(k));
+    }
+
+    /************** Nav toggle (adds ARIA state) **************/
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.addEventListener('click', () => {
+      const open = navMenu.classList.toggle('show');
+      navToggle.classList.toggle('active', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    /************** Preferences: opt-out & contrast **************/
+    const optOutEl = document.querySelector('#optOut');
+    const contrastToggle = document.querySelector('#contrastToggle');
+    const privacyMsg = document.querySelector('#privacyMessage');
+
+    // initialize controls from storage
+    const storedOptOut = localStorage.getItem(STORAGE_KEYS.optOut) === 'true';
+    if (storedOptOut) optOutEl.checked = true;
+
+    const storedContrast = localStorage.getItem(STORAGE_KEYS.contrast) === 'true';
+    if (storedContrast) {
+      document.documentElement.classList.add('high-contrast');
+      contrastToggle.checked = true;
+    }
+
+    optOutEl.addEventListener('change', () => {
+      localStorage.setItem(STORAGE_KEYS.optOut, String(optOutEl.checked));
+      privacyMsg.textContent = optOutEl.checked
+        ? 'Opted out. We will not save new data.'
+        : 'Opt-out disabled. Preferences may be saved in your browser.';
+    });
+
+    contrastToggle.addEventListener('change', () => {
+      const on = contrastToggle.checked;
+      document.documentElement.classList.toggle('high-contrast', on);
+      localStorage.setItem(STORAGE_KEYS.contrast, String(on));
+      privacyMsg.textContent = on ? 'High-contrast enabled.' : 'High-contrast disabled.';
+    });
+
+    document.querySelector('#clearDataBtn').addEventListener('click', () => {
+      clearAllHccuData();
+      optOutEl.checked = false;
+      contrastToggle.checked = false;
+      document.documentElement.classList.remove('high-contrast');
+      privacyMsg.textContent = 'Your data has been cleared.';
+    });
+
+    /************** Newsletter form with persistence & expiry **************/
+    const form = document.querySelector('#newsletterForm');
+    const formMessage = document.querySelector('#formMessage');
+    const emailInput = document.querySelector('#email');
+
+    // preload saved email if not expired and not opted out
+    if (!storedOptOut) {
+      const savedEmail = getWithExpiry(STORAGE_KEYS.email);
+      if (savedEmail) emailInput.value = savedEmail;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        formMessage.textContent = 'Please enter a valid email.';
+        formMessage.style.color = 'red';
+        return;
+      }
+      // respect opt-out
+      const banned = localStorage.getItem(STORAGE_KEYS.optOut) === 'true';
+      if (!banned) {
+        setWithExpiry(STORAGE_KEYS.email, email, DAYS.EMAIL);
+      }
+      formMessage.textContent = 'Thank you for subscribing!';
+      formMessage.style.color = 'green';
+      form.reset();
+    });
+
+    /************** Housekeeping: purge any expired keys **************/
+    ['hccu_email','hccu_rating'].forEach(k => getWithExpiry(k)); // calling get purges if expired
+  </script>
+
+</body>
+</html>

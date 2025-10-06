@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hub - Resources</title>
+  <link rel="stylesheet" href="1stylesheet.css?v=4">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-brand">HCCU Hub</div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-menu">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    </ul>
+  </nav>
+
+  <!-- Resources grid -->
+  <main class="resources">
+    <section class="filters">
+      <h2>Search Resources</h2>
+      <label for="search">Type to filter:</label>
+      <input type="text" id="search" placeholder="Search resources...">
+    </section>
+        <section class="external module">
+      <h2>Local Events (example external data)</h2>
+      <p id="fetchStatus" aria-live="polite">Idle.</p>
+      <ul id="eventsList"></ul>
+    </section>
+
+
+    <section class="content">
+      <h2>Available Resources</h2>
+      <ul id="resourceList">
+        <li data-category="writing">Style Guidec</li>
+        <li data-category="wordpress">Publishing Guide</li>
+        <li data-category="events">Upcoming Events</li>
+        <li data-category="join">How to Join HCCU</li>
+      </ul>
+    </section>
+
+    <section class="highlight">
+      <h2>How satisfied are you with your experience at HCCU?</h2>
+      <form id="ratingForm" aria-label="Resource rating form">
+        <label for="rating">Select rating (1–5):</label>
+        <select id="rating" required>
+          <option value="">Choose...</option>
+          <option value="1">1 - Poor</option>
+          <option value="2">2 - Fair</option>
+          <option value="3">3 - Good</option>
+          <option value="4">4 - Very Good</option>
+          <option value="5">5 - Excellent</option>
+        </select>
+        <button type="submit">Submit Rating</button>
+      </form>
+      <p id="ratingMessage" role="alert" aria-live="polite"></p>
+    </section>
+
+    
+  </main>
+
+  <!-- Inline JavaScript -->
+   <script>
+    /************** Shared storage helpers (same as home) **************/
+    const STORAGE_KEYS = {
+      email: 'hccu_email',
+      emailExp: 'hccu_email_exp',
+      rating: 'hccu_rating',
+      ratingExp: 'hccu_rating_exp',
+      optOut: 'hccu_opt_out',
+      contrast: 'hccu_contrast',
+      search: 'hccu_search',
+      searchExp: 'hccu_search_exp'
+    };
+    const DAYS = { EMAIL: 30, RATING: 180, SEARCH: 7 };
+    const now = () => Date.now();
+    const daysToMs = d => d * 24 * 60 * 60 * 1000;
+    function setWithExpiry(key, value, days) {
+      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key + '_exp', String(now() + daysToMs(days)));
+    }
+    function getWithExpiry(key) {
+      const exp = Number(localStorage.getItem(key + '_exp'));
+      if (exp && now() > exp) {
+        localStorage.removeItem(key);
+        localStorage.removeItem(key + '_exp');
+        return null;
+      }
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    /************** Nav toggle (ARIA) **************/
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    navToggle.setAttribute('aria-expanded','false');
+    navToggle.addEventListener('click', () => {
+      const open = navMenu.classList.toggle('show');
+      navToggle.classList.toggle('active', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    /************** Filter resources with search persistence **************/
+    const searchInput = document.querySelector('#search');
+    const resourceItems = document.querySelectorAll('#resourceList li');
+    const optedOut = localStorage.getItem(STORAGE_KEYS.optOut) === 'true';
+
+    // restore previous search if available (and not expired)
+    if (!optedOut) {
+      const q = getWithExpiry(STORAGE_KEYS.search);
+      if (q) {
+        searchInput.value = q;
+      }
+    }
+    function applyFilter(q) {
+      const query = q.toLowerCase();
+      resourceItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+    }
+    applyFilter(searchInput.value || '');
+    searchInput.addEventListener('keyup', () => {
+      const q = searchInput.value;
+      if (!optedOut) setWithExpiry(STORAGE_KEYS.search, q, DAYS.SEARCH);
+      applyFilter(q);
+    });
+
+    /************** Rating system with persistence & expiry **************/
+    const ratingForm = document.querySelector('#ratingForm');
+    const ratingMessage = document.querySelector('#ratingMessage');
+
+    // preload message if rating exists and not expired
+    const existingRating = getWithExpiry(STORAGE_KEYS.rating);
+    if (existingRating && !optedOut) {
+      ratingMessage.textContent = `Your previous rating: ${existingRating}/5 (saved)`;
+      ratingMessage.style.color = 'inherit';
+    }
+
+    ratingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rating = document.querySelector('#rating').value;
+      if (rating) {
+        if (!optedOut) setWithExpiry(STORAGE_KEYS.rating, rating, DAYS.RATING);
+        ratingMessage.textContent = `Thank you for rating us ${rating}/5!`;
+        ratingMessage.style.color = 'green';
+        ratingForm.reset();
+      } else {
+        ratingMessage.textContent = 'Please select a rating.';
+        ratingMessage.style.color = 'red';
+      }
+    });
+
+    /************** Clear indication when external data is fetched **************/
+    const fetchStatus = document.querySelector('#fetchStatus');
+    const eventsList = document.querySelector('#eventsList');
+
+    async function getExternalData() {
+      // Clear indication + accessible status message
+      fetchStatus.textContent = 'Fetching external data…';
+      fetchStatus.dataset.loading = 'true';
+      try {
+        // Simulate an external fetch with a small delay (kept for UX)
+await new Promise(r => setTimeout(r, 800));
+// HCCU (Her Campus CU Boulder) recent items
+const data = [
+  { title: 'Mocktails & Memories: Your Guide To Going Out Without Alcohol', date: '2025-09-22' },
+  { title: 'When The “Dream Summer” Isn’t Perfect: What I Learned In D.C.', date: '2025-09-08' },
+  { title: 'Summer 2025 Takeaways', date: '2025-08-15' },
+  { title: 'I’m Inspired By Used Lipstick', date: '2025-08-01' }
+];
+
+        eventsList.innerHTML = data.map(ev => `<li><strong>${ev.title}</strong> — ${ev.date}</li>`).join('');
+        fetchStatus.textContent = 'Loaded external data.';
+      } catch (err) {
+        fetchStatus.textContent = 'Failed to load external data.';
+      } finally {
+        delete fetchStatus.dataset.loading;
+      }
+    }
+    // auto-run demo fetch
+    getExternalData();
+  </script>
+
+</body>
+</html>

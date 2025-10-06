@@ -1,0 +1,199 @@
+/* ---------------- NAVIGATION ---------------- */
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: lavender;
+  border: 2px solid black;
+  padding: 20px;
+  position: relative; /* for mobile dropdown */
+  z-index: 10;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: black;
+  margin: 3px auto;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.nav-brand { flex-grow: 1; font-weight: bold; font-size: 1.2rem; }
+
+.nav-menu {
+  display: flex;
+  gap: 15px;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.nav-menu li {
+  list-style: none;
+  border: 2px solid black;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+  flex: 1;
+}
+
+.nav-menu li a { transition-duration: .02s; }
+.nav-menu li a:hover { color: red; transition-duration: 0.2s; }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    flex-direction: column;
+    background: lavender;
+    width: 100%;
+    border-top: 2px solid black;
+    gap: 0;
+    z-index: 1000;
+  }
+  .nav-menu.show { display: flex; }
+}
+
+/* ---------------- HOMEPAGE GRID ---------------- */
+.homepage {
+  display: grid;
+  grid-template-areas:
+    "hero hero"
+    "privacy privacy"
+    "featured events"
+    "footer footer";
+  gap: 20px;
+  padding: 20px;
+}
+
+.hero       { grid-area: hero;     background: #e6f0ff; padding: 20px; }
+.featured   { grid-area: featured; background: #f9f9f9; padding: 20px; }
+.events     { grid-area: events;   background: #fffbe6; padding: 20px; }
+.privacy    { grid-area: privacy;  background: #f0f0f0; padding: 20px; }
+.footer     { grid-area: footer;   background: #ddd;    padding: 20px; }
+
+/* ---------------- RESOURCES GRID ---------------- */
+.resources {
+  display: grid;
+  grid-template-areas:
+    "filters content"
+    "filters external"
+    "filters highlight"
+    "footer footer";
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.filters   { grid-area: filters;   background: #eef;      padding: 20px; }
+.content   { grid-area: content;   background: #fdfdfd;   padding: 20px; }
+.external  { grid-area: external;  background: #e6ffe6;   padding: 20px; }
+.highlight { grid-area: highlight; background: #ffe6e6;   padding: 20px; }
+.footer    { grid-area: footer; }
+
+/* Ensure grid children don’t overflow on small screens */
+main.homepage > * , main.resources > * { min-width: 0; }
+
+/* ---------------- FORMS & INTERACTIONS ---------------- */
+form { margin-top: 1rem; }
+input, select, button {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: 2px solid black;
+}
+button { cursor: pointer; background: lavender; }
+#formMessage, #ratingMessage { margin-top: 0.5rem; font-weight: bold; }
+
+/* ---------------- RESPONSIVE BEHAVIOR ---------------- */
+/* Small phones */
+@media (max-width: 480px) {
+  .homepage {
+    grid-template-areas:
+      "hero"
+      "privacy"
+      "featured"
+      "events"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+  .resources {
+    grid-template-areas:
+      "filters"
+      "content"
+      "external"
+      "highlight"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+  .nav-menu { gap: 8px; }
+  input, select, button { width: 100%; }
+}
+
+/* Tablets / small laptops */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .homepage {
+    grid-template-areas:
+      "hero hero"
+      "privacy privacy"
+      "featured events"
+      "footer footer";
+    grid-template-columns: 1fr 1fr;
+  }
+  .resources {
+    grid-template-areas:
+      "filters content"
+      "external external"
+      "highlight highlight"
+      "footer footer";
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* Desktops */
+@media (min-width: 1025px) {
+  .homepage {
+    grid-template-areas:
+      "hero hero"
+      "privacy privacy"
+      "featured events"
+      "footer footer";
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+  .resources {
+    grid-template-areas:
+      "filters content"
+      "filters external"
+      "filters highlight"
+      "footer footer";
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* ---------------- UTILITY ---------------- */
+.hidden { display: none; }
+
+/* (Keep high-contrast only if you still want the toggle to work) */
+.high-contrast, .high-contrast body { background: black; color: yellow; }
+.high-contrast a { color: cyan; }
+
+.privacy-statement { margin: 0.5rem 0 1rem; }
+.privacy-controls { display: grid; gap: 0.5rem; margin-top: 0.5rem; }
+#fetchStatus[data-loading="true"]::after { content: " ⏳"; }
