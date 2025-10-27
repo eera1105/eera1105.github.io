@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WA10 – Random Quote Machine (Quotable via CORS proxies)</title>
+  <link rel="stylesheet" href="wa10.css" />
+</head>
+<body>
+  <div class="app">
+    <header>Random Quote Machine (Quotable via Proxy)</header>
+
+    <section class="quotes">
+      <div class="quote-text" id="js-quote-text"></div>
+      <div class="quote-text" id="js-answer-text"></div>
+    </section>
+
+    <section class="controls">
+      <button type="button" id="js-new-quote" class="new-quote button">
+        Get a new quote
+      </button>
+      <button type="button" id="js-tweet" class="twitter button">
+        Tweet this quote
+      </button>
+    </section>
+
+    <section class="explain">
+      <p class="explain-p">
+        <strong>What I added:</strong> This version uses the Quotable API but fetches it through
+        CORS proxies to avoid CORS/DNS issues that I kept running into. I also added a loading state and a Tweet button to share it on twitter.
+      </p>
+      <p class="explain-p">
+        <strong>How I’d use an API in my critique project:</strong> I could connect to NASA to pull fun facts to teach science. 
+    </section>
+  </div>
+
+  <script src="wa10.js"></script>
+</body>
+</html>
