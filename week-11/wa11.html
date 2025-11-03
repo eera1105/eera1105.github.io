@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WA11 – Simple Weather</title>
+<style>
+  body { font-family: sans-serif; margin: 30px; }
+  .box { max-width: 420px; margin:auto; padding:20px; border:1px solid #ddd; border-radius:8px; }
+  button { padding:10px 16px; border:none; background:#2563eb; color:white; border-radius:6px; cursor:pointer; }
+  input[type="text"] { width:100%; padding:8px; margin-top:6px; border:1px solid #ccc; border-radius:6px; }
+  .out { margin-top:14px; background:#f3f4f6; padding:10px; border-radius:6px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>WA11 – Weather (°F)</h2>
+  <label><input type="radio" name="mode" value="exact" checked> Exact location</label><br>
+  <label><input type="radio" name="mode" value="city"> City-level (blurred)</label><br>
+  <label><input type="radio" name="mode" value="manual"> Type a city</label>
+  <div id="manualRow" style="display:none;">
+    <input id="city" type="text" placeholder="e.g., Denver, US">
+  </div>
+  <p style="font-size:14px;color:#555;">Privacy: City-level rounds your location (~25 km). Manual only sends the city name.</p>
+  <button id="getWeather">Get Weather</button>
+  <div class="out" id="out">Ready.</div>
+</div>
+<script src="wa11.js"></script>
+</body>
+</html>
