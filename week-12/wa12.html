@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WA12 – Weather & Privacy</title>
+  <link rel="stylesheet" href="wa12.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <main id="main" class="app" aria-labelledby="app-heading" aria-describedby="app-desc">
+    <h1 id="app-heading">Weather (°F)</h1>
+    <p id="app-desc" class="intro">
+      Choose how precisely you want to share your location, then view the current weather.
+    </p>
+
+    <form id="weatherForm">
+      <fieldset class="mode-group">
+        <legend>Location sharing options</legend>
+
+        <div class="radio-row">
+          <input type="radio" id="mode-exact" name="mode" value="exact" checked>
+          <label for="mode-exact">
+            Exact location <span class="hint">(most accurate forecast, least private)</span>
+          </label>
+        </div>
+
+        <div class="radio-row">
+          <input type="radio" id="mode-city" name="mode" value="city">
+          <label for="mode-city">
+            City-level (blurred)
+            <span class="hint">(rounds your coordinates to protect privacy)</span>
+          </label>
+        </div>
+
+        <div class="radio-row">
+          <input type="radio" id="mode-manual" name="mode" value="manual">
+          <label for="mode-manual">
+            Type a city
+            <span class="hint">(only the city name is sent)</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="manualRow" class="manual-row" hidden>
+        <label for="city">City name</label>
+        <input
+          id="city"
+          name="city"
+          type="text"
+          placeholder="e.g., Denver, US"
+          autocomplete="address-level2"
+        >
+      </div>
+
+      <p class="privacy-note">
+        We use your choice above to limit how much location data is shared with the weather API.
+      </p>
+
+      <button id="getWeather" type="button">
+        Get weather
+      </button>
+    </form>
+
+    <section
+      class="out"
+      id="out"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      Ready.
+    </section>
+  </main>
+
+  <script src="wa12.js" defer></script>
+</body>
+</html>

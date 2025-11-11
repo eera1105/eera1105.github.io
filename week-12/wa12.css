@@ -1,0 +1,167 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #eef2ff, #dbeafe);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 8px 14px;
+  background-color: #111827;
+  color: #ffffff;
+  border-radius: 6px;
+  text-decoration: none;
+  z-index: 100;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  padding: 20px 22px 18px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
+.intro {
+  font-size: 14px;
+  color: #111827;
+  margin-bottom: 14px;
+}
+
+
+.mode-group {
+  border: none;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.mode-group legend {
+  font-weight: 600;
+  font-size: 15px;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.radio-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.radio-row input[type="radio"] {
+  margin-top: 3px;
+}
+
+.radio-row label {
+  font-size: 14px;
+  color: #111827;
+}
+
+.hint {
+  display: block;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.manual-row {
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.manual-row label {
+  display: block;
+  font-size: 13px;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.manual-row input[type="text"] {
+  width: 100%;
+  padding: 8px 9px;
+  border-radius: 6px;
+  border: 1px solid #9ca3af;
+  font-size: 14px;
+}
+
+
+.privacy-note {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #111827; /* stronger contrast */
+}
+
+/* Button */
+button {
+  margin-top: 10px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
+  transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #111827;
+  outline-offset: 2px;
+}
+
+/* Output region */
+.out {
+  margin-top: 14px;
+  background-color: #f9fafb;
+  padding: 10px 9px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  min-height: 24px;
+}
